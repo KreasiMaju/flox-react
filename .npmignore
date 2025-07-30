@@ -1,0 +1,38 @@
+# Source files
+src/
+scripts/
+
+# Development files
+.vscode/
+.idea/
+*.log
+*.tsbuildinfo
+
+# Build tools
+vite.config.ts
+rollup.config.js
+tsconfig.node.json
+
+# Demo files
+public/
+index.html
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Development scripts
+scripts/ 
