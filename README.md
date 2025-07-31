@@ -1,6 +1,8 @@
 # 🚀 Flox - React State Management
 
-**Flox** adalah state management library untuk React yang terinspirasi dari GetX Flutter. Flox membuat state management menjadi mudah, powerful, dan menyenangkan!
+**Flox** adalah state management library untuk React yang membuat state management menjadi mudah, powerful, dan menyenangkan!
+
+> **⚠️ Note:** Ini adalah project pribadi dan masih dalam tahap experimental. API mungkin berubah sewaktu-waktu.
 
 ## 📋 Daftar Isi
 - [Instalasi](#-instalasi)
@@ -20,7 +22,7 @@
 ### Quick Install
 ```bash
 # NPM Registry (Recommended)
-npm install @flox/react
+npm install flox-react
 
 # Atau dari Git
 npm install https://github.com/your-username/flox.git

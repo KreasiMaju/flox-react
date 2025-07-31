@@ -355,13 +355,11 @@ declare class HomeBinding extends Binding {
     dependencies(): void;
 }
 
-declare const SimpleCounter: React.FC;
-
 declare const SimpleHomePage: React.FC;
 
 declare const FenixPermanentDemo: React.FC;
 
 declare const AdvancedDemo: React.FC;
 
-export { AdvancedController, AdvancedDemo, AppController, BackgroundWorker, Binding, Controller, FenixPermanentDemo, Flox, Get, HomeBinding, HomeController, Rx, SettingsController, SimpleCounter, SimpleHomePage, Subject, UserController, flox, rx, rxBool, rxInt, rxString, useBinding, useController, useControllerSubject, useGlobalController, useRx, useRxValue, useSubject };
+export { AdvancedController, AdvancedDemo, AppController, BackgroundWorker, Binding, Controller, FenixPermanentDemo, Flox, Get, HomeBinding, HomeController, Rx, SettingsController, SimpleHomePage, Subject, UserController, flox, rx, rxBool, rxInt, rxString, useBinding, useController, useControllerSubject, useGlobalController, useRx, useRxValue, useSubject };
 export type { AdvancedControllerInterface, AppControllerInterface, BindingInterface, HomeControllerInterface, HomeControllerRepository, HomeViewModel, Observer, SettingsControllerInterface, UserControllerInterface };

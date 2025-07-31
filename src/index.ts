@@ -19,7 +19,7 @@ export { AppController, type AppControllerInterface } from './controllers/AppCon
 export { SettingsController, type SettingsControllerInterface } from './controllers/SettingsController';
 export { AdvancedController, type AdvancedControllerInterface } from './controllers/AdvancedController';
 export { HomeBinding } from './bindings/HomeBinding';
-export { SimpleCounter } from './examples/SimpleExample';
+// Removed SimpleCounter to avoid circular dependency
 export { SimpleHomePage } from './components/SimpleHomePage';
 export { FenixPermanentDemo } from './components/FenixPermanentDemo';
 export { AdvancedDemo } from './components/AdvancedDemo'; 

@@ -9,8 +9,8 @@ export const AdvancedDemo: React.FC = () => {
   
   // Use Rx variables
   const [count, setCount] = useRx(advancedController.count);
-  const [name, setName] = useRx(advancedController.name);
-  const [isLoading, setIsLoading] = useRx(advancedController.isLoading);
+  const [name] = useRx(advancedController.name);
+  const [isLoading] = useRx(advancedController.isLoading);
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>

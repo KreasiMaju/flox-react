@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not needed in newer versions
 import { AdvancedDemo } from './components/AdvancedDemo';
 
 function App() {

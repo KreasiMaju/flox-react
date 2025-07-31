@@ -1,6 +1,7 @@
 {
-  "name": "@flox/react",
+  "name": "flox-react",
   "version": "1.0.0",
+  "type": "module",
   "description": "React State Management inspired by GetX Flutter - Flox",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

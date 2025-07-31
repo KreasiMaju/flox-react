@@ -21,11 +21,14 @@ export default [
         sourcemap: true,
       },
     ],
-    plugins: [
-      resolve(),
-      commonjs(),
-      typescript({ tsconfig: './tsconfig.json' }),
-    ],
+          plugins: [
+        resolve(),
+        commonjs(),
+        typescript({ 
+          tsconfig: './tsconfig.json',
+          exclude: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx']
+        }),
+      ],
     external: ['react', 'react-dom'],
   },
   {

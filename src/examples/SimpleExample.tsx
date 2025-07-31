@@ -37,11 +37,11 @@ class CounterController extends Controller {
 // Simple Counter Component
 export const SimpleCounter: React.FC = () => {
   const controller = useController(new CounterController());
-  const [count] = useSubject(controller.getSubject('count')!);
+  const [count] = useSubject(controller.getSubjectPublic('count')!);
 
   return (
     <div style={{ padding: '20px', textAlign: 'center' }}>
-      <h2>Simple Counter: {count}</h2>
+      <h2>Simple Counter: {count as number}</h2>
       <div style={{ marginTop: '10px' }}>
         <button 
           onClick={() => controller.increment()}
