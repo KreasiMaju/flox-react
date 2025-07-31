@@ -2,7 +2,7 @@
 
 **Flox** adalah state management library untuk React yang membuat state management menjadi mudah, powerful, dan menyenangkan!
 
-> **⚠️ Note:** Ini adalah project pribadi dan masih dalam tahap experimental. API mungkin berubah sewaktu-waktu.
+> **🚨 WARNING:** Ini adalah project pribadi dan masih dalam tahap experimental. API mungkin berubah sewaktu-waktu.
 
 ## 📋 Daftar Isi
 - [Instalasi](#-instalasi)
@@ -25,7 +25,7 @@
 npm install flox-react
 
 # Atau dari Git
-npm install https://github.com/your-username/flox.git
+npm install https://github.com/KreasiMaju/flox-react.git
 
 # Atau dengan package manager lain
 yarn add @flox/react

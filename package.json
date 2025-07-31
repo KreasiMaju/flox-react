@@ -2,7 +2,7 @@
   "name": "flox-react",
   "version": "1.0.0",
   "type": "module",
-  "description": "React State Management inspired by GetX Flutter - Flox",
+  "description": "React State Management - Flox",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.esm.js",
@@ -48,20 +48,18 @@
     "react",
     "state-management",
     "typescript",
-    "getx",
-    "flutter",
     "reactive",
     "controller",
     "binding"
   ],
-  "author": "Flox Team",
+  "author": "KreasiMaju",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/flox.git"
+    "url": "https://github.com/KreasiMaju/flox-react.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/flox/issues"
+    "url": "https://github.com/KreasiMaju/flox-react/issues"
   },
-  "homepage": "https://github.com/your-username/flox#readme"
+  "homepage": "https://github.com/KreasiMaju/flox-react#readme"
 }
