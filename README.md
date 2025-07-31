@@ -1,12 +1,12 @@
 # 🚀 Flox - React State Management
 
-**Flox** adalah state management library untuk React yang membuat state management menjadi mudah, powerful, dan menyenangkan!
+**Flox** is a state management library for React that makes state management easy, powerful, and enjoyable!
 
-> **🚨 WARNING:** Ini adalah project pribadi dan masih dalam tahap experimental. API mungkin berubah sewaktu-waktu.
+> **🚨 WARNING:** This is a personal project and still in experimental stage. API may change at any time.
 
-## 📋 Daftar Isi
-- [Instalasi](#-instalasi)
-- [Konsep Dasar](#-konsep-dasar)
+## 📋 Table of Contents
+- [Installation](#-installation)
+- [Core Concepts](#-core-concepts)
 - [Quick Start](#-quick-start)
 - [Controller](#-controller)
 - [Rx Variables](#-rx-variables)
@@ -14,55 +14,55 @@
 - [Get Utilities](#-get-utilities)
 - [Background Workers](#-background-workers)
 - [React Hooks](#-react-hooks)
-- [Contoh Lengkap](#-contoh-lengkap)
+- [Complete Example](#-complete-example)
 - [API Reference](#-api-reference)
 
-## 🛠️ Instalasi
+## 🛠️ Installation
 
 ### Quick Install
 ```bash
 # NPM Registry (Recommended)
 npm install flox-react
 
-# Atau dari Git
+# Or from Git
 npm install https://github.com/KreasiMaju/flox-react.git
 
-# Atau dengan package manager lain
-yarn add @flox/react
-bun add @flox/react
-pnpm add @flox/react
+# Or with other package managers
+yarn add flox-react
+bun add flox-react
+pnpm add flox-react
 ```
 
-### 📖 Panduan Instalasi Lengkap
-Untuk panduan instalasi yang lebih detail, lihat [INSTALLATION.md](./INSTALLATION.md) yang mencakup:
-- Setup untuk berbagai project types (CRA, Vite, Next.js)
+### 📖 Complete Installation Guide
+For more detailed installation guide, see [INSTALLATION.md](./INSTALLATION.md) which covers:
+- Setup for various project types (CRA, Vite, Next.js)
 - Troubleshooting common issues
-- Migration dari library lain
+- Migration from other libraries
 - TypeScript setup
-- Project structure yang direkomendasikan
+- Recommended project structure
 
-## 🎯 Konsep Dasar
+## 🎯 Core Concepts
 
-Flox memiliki 3 konsep utama:
+Flox has 3 main concepts:
 
-1. **Controller** - Tempat menyimpan state dan logic
-2. **Rx Variables** - State yang reactive (otomatis update UI)
-3. **Binding** - Cara menghubungkan Controller dengan React
+1. **Controller** - Place to store state and logic
+2. **Rx Variables** - Reactive state (automatically updates UI)
+3. **Binding** - Way to connect Controller with React
 
 ## ⚡ Quick Start
 
-### 1. Buat Controller
+### 1. Create Controller
 
 ```typescript
 import { Controller } from 'flox';
 
 export class CounterController extends Controller {
-  // Rx variables - state yang reactive
+  // Rx variables - reactive state
   count = rxInt(0);
   name = rxString('User');
 
   increment() {
-    this.count.value++; // UI otomatis update!
+    this.count.value++; // UI automatically updates!
   }
 
   updateName(newName: string) {
@@ -71,7 +71,7 @@ export class CounterController extends Controller {
 }
 ```
 
-### 2. Gunakan di React Component
+### 2. Use in React Component
 
 ```typescript
 import React from 'react';
@@ -81,7 +81,7 @@ import { CounterController } from './CounterController';
 function CounterApp() {
   const controller = useController(new CounterController());
   
-  // Subscribe ke Rx variables
+  // Subscribe to Rx variables
   const [count, setCount] = useRx(controller.count);
   const [name, setName] = useRx(controller.name);
 
@@ -101,11 +101,11 @@ function CounterApp() {
 }
 ```
 
-**Itu saja!** UI akan otomatis update setiap kali state berubah! 🎉
+**That's it!** UI will automatically update every time state changes! 🎉
 
 ## 🎮 Controller
 
-Controller adalah tempat menyimpan state dan business logic.
+Controller is where you store state and business logic.
 
 ### Basic Controller
 
@@ -142,14 +142,14 @@ export class UserController extends Controller {
 }
 ```
 
-### Controller dengan Subjects (Advanced)
+### Controller with Subjects (Advanced)
 
 ```typescript
 export class AdvancedController extends Controller {
   constructor() {
     super();
     
-    // Buat subjects untuk state yang lebih kompleks
+    // Create subjects for more complex state
     this.createSubject('user', null);
     this.createSubject('loading', false);
     this.createSubject('error', null);
@@ -172,19 +172,19 @@ export class AdvancedController extends Controller {
 
 ## 🔄 Rx Variables
 
-Rx variables adalah state yang reactive. Setiap perubahan akan otomatis update UI!
+Rx variables are reactive state. Every change will automatically update the UI!
 
-### Tipe Rx Variables
+### Rx Variable Types
 
 ```typescript
 import { rxInt, rxString, rxBool, rx } from 'flox';
 
-// Tipe spesifik
+// Specific types
 const count = rxInt(0);        // number
 const name = rxString('');     // string  
 const active = rxBool(false);  // boolean
 
-// Tipe custom
+// Custom types
 const user = rx({ name: '', age: 0 });  // object
 const items = rx<string[]>([]);         // array
 ```
@@ -207,7 +207,7 @@ count.update(x => x + 10);
 console.log(count.value); // 15
 ```
 
-### Rx di Controller
+### Rx in Controller
 
 ```typescript
 export class ProductController extends Controller {
@@ -237,55 +237,55 @@ export class ProductController extends Controller {
 
 ## 🔗 Binding
 
-Binding adalah cara menghubungkan Controller dengan React. Ada 4 tipe:
+Binding is how you connect Controller with React. There are 4 types:
 
 ### 1. Normal Controller
 ```typescript
-// Dibuat sekali, hidup sampai component unmount
+// Created once, lives until component unmounts
 this.putController('user', new UserController());
 ```
 
 ### 2. Fenix Controller
 ```typescript
-// Dibuat ulang setiap kali diakses (fresh state)
+// Recreated every time accessed (fresh state)
 this.putFenix('temp', () => new TempController());
 ```
 
 ### 3. Permanent Controller
 ```typescript
-// Tidak pernah di-dispose, hidup selama aplikasi
+// Never disposed, lives throughout the app
 this.putPermanent('app', new AppController());
 ```
 
 ### 4. Lazy Controller
 ```typescript
-// Hanya dibuat saat pertama kali diakses
+// Only created when first accessed
 this.lazyPut('settings', () => new SettingsController());
 ```
 
-### Contoh Binding Lengkap
+### Complete Binding Example
 
 ```typescript
 import { Binding } from 'flox';
 
 export class AppBinding extends Binding {
   dependencies() {
-    // Normal - untuk data utama
+    // Normal - for main data
     this.putController('user', new UserController());
     
-    // Fenix - untuk data temporary
+    // Fenix - for temporary data
     this.putFenix('search', () => new SearchController());
     
-    // Permanent - untuk app settings
+    // Permanent - for app settings
     this.putPermanent('theme', new ThemeController());
     
-    // Lazy - untuk fitur yang jarang dipakai
+    // Lazy - for rarely used features
     this.lazyPut('analytics', () => new AnalyticsController());
   }
 }
 ```
 
-### Gunakan Binding di React
+### Use Binding in React
 
 ```typescript
 import { useBinding } from 'flox';
@@ -293,7 +293,7 @@ import { useBinding } from 'flox';
 function App() {
   const binding = useBinding('app', new AppBinding());
   
-  // Ambil controller dari binding
+  // Get controller from binding
   const userController = binding.getControllerPublic('user');
   const themeController = binding.getControllerPublic('theme');
   
@@ -308,7 +308,7 @@ function App() {
 
 ## 🛠️ Get Utilities
 
-Get menyediakan utility functions yang berguna.
+Get provides useful utility functions.
 
 ### Controller Management
 
@@ -334,30 +334,30 @@ Get.delete('user');
 
 ```typescript
 // Snackbar
-Get.snackbar('Data berhasil disimpan!');
+Get.snackbar('Data saved successfully!');
 
 // Dialog
-const confirmed = await Get.dialog('Konfirmasi', 'Hapus data?');
+const confirmed = await Get.dialog('Confirmation', 'Delete data?');
 if (confirmed) {
-  // User klik OK
+  // User clicked OK
 }
 
 // Loading
-Get.loading('Menyimpan data...');
+Get.loading('Saving data...');
 Get.closeLoading();
 ```
 
 ## ⚙️ Background Workers
 
-Worker untuk menjalankan task di background.
+Worker for running tasks in the background.
 
 ```typescript
 import { BackgroundWorker } from 'flox';
 
-// Buat worker
+// Create worker
 BackgroundWorker.create('sync-data', async () => {
   await syncDataToServer();
-  Get.snackbar('Sync selesai!');
+  Get.snackbar('Sync completed!');
 });
 
 // Start worker
@@ -365,7 +365,7 @@ BackgroundWorker.start('sync-data');
 
 // Check status
 if (BackgroundWorker.isRunning('sync-data')) {
-  console.log('Worker sedang berjalan');
+  console.log('Worker is running');
 }
 
 // Stop worker
@@ -377,7 +377,7 @@ BackgroundWorker.delete('sync-data');
 
 ## 🎣 React Hooks
 
-Flox menyediakan hooks untuk React integration.
+Flox provides hooks for React integration.
 
 ### useController
 ```typescript
@@ -386,10 +386,10 @@ const controller = useController(new UserController());
 
 ### useRx
 ```typescript
-// Get value dan setter
+// Get value and setter
 const [count, setCount] = useRx(controller.count);
 
-// Hanya get value
+// Only get value
 const count = useRxValue(controller.count);
 ```
 
@@ -403,7 +403,7 @@ const [user, setUser] = useSubject(controller.getSubjectPublic('user'));
 const binding = useBinding('app', new AppBinding());
 ```
 
-## 📝 Contoh Lengkap
+## 📝 Complete Example
 
 ### E-commerce App
 
@@ -590,7 +590,7 @@ function useGlobalController<T extends Controller>(key: string, controller: T): 
 
 ## 🎯 Best Practices
 
-### 1. Struktur Project
+### 1. Project Structure
 ```
 src/
 ├── controllers/
@@ -631,7 +631,7 @@ export class SafeController extends Controller {
       this.updateSubject('data', result);
     } catch (error) {
       this.updateSubject('error', error);
-      Get.snackbar('Terjadi kesalahan!');
+      Get.snackbar('An error occurred!');
     } finally {
       this.updateSubject('loading', false);
     }
@@ -641,22 +641,22 @@ export class SafeController extends Controller {
 
 ### 4. Performance Tips
 ```typescript
-// ✅ Gunakan lazyPut untuk fitur yang jarang dipakai
+// ✅ Use lazyPut for rarely used features
 this.lazyPut('analytics', () => new AnalyticsController());
 
-// ✅ Gunakan Fenix untuk data temporary
+// ✅ Use Fenix for temporary data
 this.putFenix('search', () => new SearchController());
 
-// ✅ Dispose Rx variables di onDispose
+// ✅ Dispose Rx variables in onDispose
 onDispose() {
   this.count.dispose();
   this.name.dispose();
 }
 ```
 
-## 🚀 Migration dari Redux/Zustand
+## 🚀 Migration from Redux/Zustand
 
-### Dari Redux
+### From Redux
 ```typescript
 // ❌ Redux way
 const mapStateToProps = (state) => ({
@@ -674,12 +674,12 @@ const controller = useController(new CounterController());
 const [count] = useRx(controller.count);
 const [name] = useRx(controller.name);
 
-// Methods langsung dari controller
+// Methods directly from controller
 controller.increment();
 controller.updateName('New Name');
 ```
 
-### Dari Zustand
+### From Zustand
 ```typescript
 // ❌ Zustand way
 const useStore = create((set) => ({
@@ -698,12 +698,12 @@ export class CounterController extends Controller {
 
 ## 🤝 Contributing
 
-Kontribusi sangat welcome! Silakan buat issue atau pull request.
+Contributions are very welcome! Please create issues or pull requests.
 
 ## 📄 License
 
-MIT License - bebas digunakan untuk project apapun!
+MIT License - free to use for any project!
 
 ---
 
-**Flox** - State management yang mudah, powerful, dan menyenangkan! 🎉 
+**Flox** - State management that's easy, powerful, and enjoyable! 🎉 
