@@ -529,6 +529,8 @@ describe('UserProfile', () => {
 2. **[Examples](../examples/basic-examples.md)** - See patterns in action
 3. **[Performance Guide](./performance.md)** - Optimize your app
 4. **[Debugging Guide](./debugging.md)** - Troubleshoot issues
+5. **[Monitoring Guide](./monitoring.md)** - Monitor your app in real-time
+6. **[Testing Framework](../testing/README.md)** - Comprehensive testing suite for quality assurance
 
 ---
 

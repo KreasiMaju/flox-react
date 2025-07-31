@@ -14,6 +14,7 @@
 - [FloxUtils](#-floxutils)
 - [Background Workers](#-background-workers)
 - [React Hooks](#-react-hooks)
+- [Testing Framework](#-testing-framework)
 - [Complete Example](#-complete-example)
 - [API Reference](#-api-reference)
 
@@ -43,11 +44,12 @@ For more detailed installation guide, see [INSTALLATION.md](./INSTALLATION.md) w
 
 ## 🎯 Core Concepts
 
-Flox has 3 main concepts:
+Flox has 4 main concepts:
 
 1. **Controller** - Place to store state and logic
 2. **Rx Variables** - Reactive state (automatically updates UI)
 3. **Binding** - Way to connect Controller with React
+4. **Testing Framework** - Comprehensive testing suite for quality assurance
 
 ## ⚡ Quick Start
 
@@ -403,6 +405,92 @@ const [user, setUser] = useSubject(controller.getSubjectPublic('user'));
 const binding = useBinding('app', new AppBinding());
 ```
 
+## 🧪 Testing Framework
+
+Flox includes a comprehensive testing framework for quality assurance.
+
+### Quick Test Example
+
+```typescript
+import { FloxTestRunner, FloxTestUtils } from 'flox';
+
+describe('UserController', () => {
+  let controller: UserController;
+  let utils: FloxTestUtils;
+
+  beforeEach(() => {
+    utils = new FloxTestUtils();
+    utils.setupTestEnvironment();
+    controller = FloxTestUtils.createMockController(UserController);
+  });
+
+  it('should load user data successfully', async () => {
+    const mockUser = FloxTestUtils.createTestUser(1);
+    utils.mockApiResponse('/api/user/1', mockUser);
+
+    await controller.loadUser(1);
+
+    expect(controller.user.value).toEqual(mockUser);
+    expect(controller.loading.value).toBe(false);
+  });
+});
+```
+
+### Performance Testing
+
+```typescript
+const result = await FloxTestRunner.testPerformance(
+  async () => {
+    for (let i = 0; i < 1000; i++) {
+      controller.count.value = i;
+    }
+  },
+  { maxDuration: 100, iterations: 10 }
+);
+```
+
+### Memory Leak Testing
+
+```typescript
+const result = await FloxTestRunner.testMemoryLeaks(
+  async () => {
+    const controller = new TestController();
+    controller.onInit();
+    // ... operations ...
+    controller.onDispose();
+  },
+  { maxMemoryLeak: 1024 * 1024, iterations: 50 }
+);
+```
+
+### Test Suites
+
+```typescript
+const testSuite = {
+  name: 'UserController Test Suite',
+  tests: [
+    async () => {
+      const result = await FloxTestRunner.testController(
+        UserController,
+        async (controller, utils) => {
+          const mockUser = FloxTestUtils.createTestUser(1);
+          utils.mockApiResponse('/api/user/1', mockUser);
+          await controller.loadUser(1);
+          expect(controller.user.value).toEqual(mockUser);
+        }
+      );
+      if (!result.success) throw new Error(result.error?.message);
+    }
+  ]
+};
+
+const runner = new FloxTestRunner();
+const results = await runner.runTestSuite(testSuite);
+console.log(runner.generateReport());
+```
+
+**📖 For complete testing guide, see [Testing Documentation](./docs/testing/README.md)**
+
 ## 📝 Complete Example
 
 ### E-commerce App
@@ -574,6 +662,35 @@ class BackgroundWorker {
 }
 ```
 
+### Testing Framework
+```typescript
+class FloxTestUtils {
+  static createMockController<T>(controllerClass: new () => T): T
+  static createMockBinding<T>(bindingClass: new () => T): T
+  static createTestUser(id: number): User
+  static createTestUsers(count: number): User[]
+  static waitFor(condition: () => boolean, timeout?: number): Promise<void>
+  static waitForRxValue<T>(rx: Rx<T>, expectedValue: T): Promise<void>
+  static waitForRxChange<T>(rx: Rx<T>): Promise<T>
+  static measureExecutionTime<T>(fn: () => T): { result: T; time: number }
+  static measureMemoryUsage<T>(fn: () => T): { result: T; memoryBefore: number; memoryAfter: number }
+  setupTestEnvironment(): void
+  cleanupTestEnvironment(): void
+  mockApiResponse(url: string, response: any, options?: MockApiResponse): void
+  mockApiError(url: string, error: string, options?: MockApiError): void
+}
+
+class FloxTestRunner {
+  static testController<T>(controllerClass: new () => T, testSuite: Function, options?: object): Promise<TestResult>
+  static testIntegration(bindingClass: new () => Binding, testSuite: Function, options?: object): Promise<TestResult>
+  static testPerformance(testFunction: Function, options?: PerformanceTestOptions): Promise<TestResult>
+  static testMemoryLeaks(testFunction: Function, options?: MemoryTestOptions): Promise<TestResult>
+  runTestSuite(suite: TestSuite): Promise<TestResult[]>
+  generateReport(): string
+  getSummary(): TestSummary
+}
+```
+
 ### React Hooks
 ```typescript
 function useController<T extends Controller>(controller: T): T
@@ -603,9 +720,17 @@ src/
 ├── components/
 │   ├── UserProfile.tsx
 │   └── ProductList.tsx
-└── pages/
-    ├── HomePage.tsx
-    └── ShopPage.tsx
+├── pages/
+│   ├── HomePage.tsx
+│   └── ShopPage.tsx
+└── tests/
+    ├── controllers/
+    │   ├── UserController.test.ts
+    │   └── ProductController.test.ts
+    ├── integration/
+    │   └── AppBinding.test.ts
+    └── performance/
+        └── PerformanceTests.test.ts
 ```
 
 ### 2. Naming Convention
@@ -652,6 +777,38 @@ onDispose() {
   this.count.dispose();
   this.name.dispose();
 }
+```
+
+### 5. Testing Best Practices
+```typescript
+// ✅ Test controller lifecycle
+describe('UserController', () => {
+  beforeEach(() => {
+    utils = new FloxTestUtils();
+    utils.setupTestEnvironment();
+    controller = FloxTestUtils.createMockController(UserController);
+  });
+
+  afterEach(() => {
+    utils.cleanupTestEnvironment();
+  });
+});
+
+// ✅ Mock API responses
+utils.mockApiResponse('/api/user/1', mockUser);
+utils.mockApiError('/api/user/999', 'User not found');
+
+// ✅ Test performance and memory
+const result = await FloxTestRunner.testPerformance(testFunction, {
+  maxDuration: 100,
+  maxMemoryIncrease: 1024 * 1024
+});
+
+// ✅ Use test suites for complex scenarios
+const testSuite = {
+  name: 'Complete User Flow',
+  tests: [test1, test2, test3]
+};
 ```
 
 ## 🚀 Migration from Redux/Zustand

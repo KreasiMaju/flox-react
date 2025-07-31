@@ -453,8 +453,11 @@ get filteredData() {
 
 1. **[Best Practices](./best-practices.md)** - Follow Flox conventions
 2. **[Debugging Guide](./debugging.md)** - Troubleshoot performance issues
-3. **[Examples](../examples/advanced-examples.md)** - See optimization patterns
-4. **[API Reference](../api/controller.md)** - Master the APIs
+3. **[Monitoring Guide](./monitoring.md)** - Monitor performance in real-time
+4. **[Optimization Guide](./optimization.md)** - Memory leak prevention and performance optimization
+5. **[Testing Framework](../testing/README.md)** - Test performance and memory usage
+6. **[Examples](../examples/advanced-examples.md)** - See optimization patterns
+7. **[API Reference](../api/controller.md)** - Master the APIs
 
 ---
 
