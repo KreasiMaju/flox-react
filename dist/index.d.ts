@@ -208,7 +208,7 @@ declare function rxInt(initialValue: number): Rx<number>;
 declare function rxString(initialValue: string): Rx<string>;
 declare function rxBool(initialValue: boolean): Rx<boolean>;
 
-declare class Get {
+declare class FloxUtils {
     static put<T extends Controller>(key: string, controller: T): T;
     static find<T extends Controller>(key: string): T;
     static delete(key: string): boolean;
@@ -334,7 +334,7 @@ interface AdvancedControllerInterface {
     updateName(name: string): void;
     startBackgroundTask(): void;
     showSnackbar(): void;
-    showDialog(): void;
+    showDialog(): Promise<void>;
 }
 declare class AdvancedController extends Controller implements AdvancedControllerInterface {
     count: Rx<number>;
@@ -361,5 +361,5 @@ declare const FenixPermanentDemo: React.FC;
 
 declare const AdvancedDemo: React.FC;
 
-export { AdvancedController, AdvancedDemo, AppController, BackgroundWorker, Binding, Controller, FenixPermanentDemo, Flox, Get, HomeBinding, HomeController, Rx, SettingsController, SimpleHomePage, Subject, UserController, flox, rx, rxBool, rxInt, rxString, useBinding, useController, useControllerSubject, useGlobalController, useRx, useRxValue, useSubject };
+export { AdvancedController, AdvancedDemo, AppController, BackgroundWorker, Binding, Controller, FenixPermanentDemo, Flox, FloxUtils, HomeBinding, HomeController, Rx, SettingsController, SimpleHomePage, Subject, UserController, flox, rx, rxBool, rxInt, rxString, useBinding, useController, useControllerSubject, useGlobalController, useRx, useRxValue, useSubject };
 export type { AdvancedControllerInterface, AppControllerInterface, BindingInterface, HomeControllerInterface, HomeControllerRepository, HomeViewModel, Observer, SettingsControllerInterface, UserControllerInterface };

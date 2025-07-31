@@ -11,7 +11,7 @@
 - [Controller](#-controller)
 - [Rx Variables](#-rx-variables)
 - [Binding](#-binding)
-- [Get Utilities](#-get-utilities)
+- [FloxUtils](#-floxutils)
 - [Background Workers](#-background-workers)
 - [React Hooks](#-react-hooks)
 - [Complete Example](#-complete-example)
@@ -306,45 +306,45 @@ function App() {
 }
 ```
 
-## 🛠️ Get Utilities
+## 🛠️ FloxUtils
 
-Get provides useful utility functions.
+FloxUtils provides useful utility functions.
 
 ### Controller Management
 
 ```typescript
-import { Get } from 'flox';
+import { FloxUtils } from 'flox';
 
 // Register controller
-Get.put('user', new UserController());
+FloxUtils.put('user', new UserController());
 
 // Get controller
-const userController = Get.find<UserController>('user');
+const userController = FloxUtils.find<UserController>('user');
 
 // Check if registered
-if (Get.isRegistered('user')) {
+if (FloxUtils.isRegistered('user')) {
   console.log('User controller exists!');
 }
 
 // Delete controller
-Get.delete('user');
+FloxUtils.delete('user');
 ```
 
 ### UI Utilities
 
 ```typescript
 // Snackbar
-Get.snackbar('Data saved successfully!');
+FloxUtils.snackbar('Data saved successfully!');
 
 // Dialog
-const confirmed = await Get.dialog('Confirmation', 'Delete data?');
+const confirmed = await FloxUtils.dialog('Confirmation', 'Delete data?');
 if (confirmed) {
   // User clicked OK
 }
 
 // Loading
-Get.loading('Saving data...');
-Get.closeLoading();
+FloxUtils.loading('Saving data...');
+FloxUtils.closeLoading();
 ```
 
 ## ⚙️ Background Workers
@@ -357,7 +357,7 @@ import { BackgroundWorker } from 'flox';
 // Create worker
 BackgroundWorker.create('sync-data', async () => {
   await syncDataToServer();
-  Get.snackbar('Sync completed!');
+  FloxUtils.snackbar('Sync completed!');
 });
 
 // Start worker
@@ -545,9 +545,9 @@ abstract class Binding {
 }
 ```
 
-### Get
+### FloxUtils
 ```typescript
-class Get {
+class FloxUtils {
   static put<T extends Controller>(key: string, controller: T): T
   static find<T extends Controller>(key: string): T
   static delete(key: string): boolean
@@ -631,7 +631,7 @@ export class SafeController extends Controller {
       this.updateSubject('data', result);
     } catch (error) {
       this.updateSubject('error', error);
-      Get.snackbar('An error occurred!');
+      FloxUtils.snackbar('An error occurred!');
     } finally {
       this.updateSubject('loading', false);
     }

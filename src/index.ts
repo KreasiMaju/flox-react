@@ -4,7 +4,7 @@ export { Subject, type Observer } from './core/Subject';
 export { Binding, type BindingInterface } from './core/Binding';
 export { Flox, flox } from './core/Flox';
 export { Rx, rx, rxInt, rxString, rxBool } from './core/Rx';
-export { Get } from './core/Get';
+export { FloxUtils } from './core/Get';
 export { BackgroundWorker } from './core/Worker';
 
 // Hooks exports

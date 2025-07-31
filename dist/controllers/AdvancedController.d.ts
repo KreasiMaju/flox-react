@@ -9,7 +9,7 @@ export interface AdvancedControllerInterface {
     updateName(name: string): void;
     startBackgroundTask(): void;
     showSnackbar(): void;
-    showDialog(): void;
+    showDialog(): Promise<void>;
 }
 export declare class AdvancedController extends Controller implements AdvancedControllerInterface {
     count: Rx<number>;

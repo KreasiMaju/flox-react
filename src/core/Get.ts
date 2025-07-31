@@ -2,7 +2,7 @@ import { flox } from './Flox';
 import { Controller } from './Controller';
 import { Binding } from './Binding';
 
-export class Get {
+export class FloxUtils {
   // Controller management
   static put<T extends Controller>(key: string, controller: T): T {
     return flox.putController(key, controller);

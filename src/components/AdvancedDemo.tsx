@@ -46,9 +46,9 @@ export const AdvancedDemo: React.FC = () => {
         </div>
       </div>
 
-      {/* Get Utilities */}
+      {/* FloxUtils */}
       <div style={{ marginBottom: '30px', padding: '15px', border: '2px solid #28a745', borderRadius: '8px' }}>
-        <h2>🛠️ Get Utilities</h2>
+        <h2>🛠️ FloxUtils</h2>
         <button 
           onClick={() => advancedController.showSnackbar()} 
           style={{ marginRight: '10px' }}

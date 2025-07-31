@@ -1,6 +1,6 @@
 import { Controller } from './Controller';
 import { Binding } from './Binding';
-export declare class Get {
+export declare class FloxUtils {
     static put<T extends Controller>(key: string, controller: T): T;
     static find<T extends Controller>(key: string): T;
     static delete(key: string): boolean;

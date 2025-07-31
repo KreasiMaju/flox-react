@@ -506,7 +506,7 @@ function rxBool(initialValue) {
     return new Rx(initialValue);
 }
 
-class Get {
+class FloxUtils {
     // Controller management
     static put(key, controller) {
         return flox.putController(key, controller);
@@ -916,7 +916,6 @@ class SettingsController extends Controller {
 class AdvancedController extends Controller {
     constructor() {
         super();
-        // Rx variables
         Object.defineProperty(this, "count", {
             enumerable: true,
             configurable: true,
@@ -935,13 +934,13 @@ class AdvancedController extends Controller {
             writable: true,
             value: rxBool(false)
         });
-        // Register worker
+        // Setup background worker
         BackgroundWorker.create('background-task', async () => {
             this.isLoading.value = true;
+            // Simulate async work
             await new Promise(resolve => setTimeout(resolve, 2000));
-            this.count.value += 10;
             this.isLoading.value = false;
-            Get.snackbar('Background task completed!');
+            FloxUtils.snackbar('Background task completed!');
         });
     }
     increment() {
@@ -957,13 +956,13 @@ class AdvancedController extends Controller {
         BackgroundWorker.start('background-task');
     }
     showSnackbar() {
-        Get.snackbar(`Hello ${this.name.value}! Count is ${this.count.value}`);
+        FloxUtils.snackbar(`Hello ${this.name.value}! Count is ${this.count.value}`);
     }
     async showDialog() {
-        const confirmed = await Get.dialog('Confirmation', `Are you sure you want to reset count from ${this.count.value} to 0?`);
+        const confirmed = await FloxUtils.dialog('Confirmation', `Are you sure you want to reset count from ${this.count.value} to 0?`);
         if (confirmed) {
             this.count.value = 0;
-            Get.snackbar('Count reset to 0!');
+            FloxUtils.snackbar('Count reset to 0!');
         }
     }
     onInit() {
@@ -971,10 +970,7 @@ class AdvancedController extends Controller {
     }
     onDispose() {
         BackgroundWorker.delete('background-task');
-        this.count.dispose();
-        this.name.dispose();
-        this.isLoading.dispose();
-        super.onDispose();
+        console.log('AdvancedController disposed');
     }
 }
 
@@ -2389,7 +2385,7 @@ const AdvancedDemo = () => {
     const [count, setCount] = useRx(advancedController.count);
     const [name] = useRx(advancedController.name);
     const [isLoading] = useRx(advancedController.isLoading);
-    return (jsxRuntimeExports.jsxs("div", { style: { padding: '20px', fontFamily: 'Arial, sans-serif' }, children: [jsxRuntimeExports.jsx("h1", { children: "\uD83D\uDE80 Flox Advanced Features Demo" }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #007bff', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\uD83D\uDD04 Rx Variables" }), jsxRuntimeExports.jsxs("p", { children: ["Count: ", count] }), jsxRuntimeExports.jsxs("p", { children: ["Name: ", name] }), jsxRuntimeExports.jsxs("p", { children: ["Loading: ", isLoading ? 'Yes' : 'No'] }), jsxRuntimeExports.jsxs("div", { style: { marginTop: '10px' }, children: [jsxRuntimeExports.jsx("button", { onClick: () => advancedController.increment(), style: { marginRight: '10px' }, children: "Increment" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.decrement(), style: { marginRight: '10px' }, children: "Decrement" }), jsxRuntimeExports.jsx("button", { onClick: () => setCount(0), children: "Reset" })] }), jsxRuntimeExports.jsx("div", { style: { marginTop: '10px' }, children: jsxRuntimeExports.jsx("input", { type: "text", value: name, onChange: (e) => advancedController.updateName(e.target.value), placeholder: "Enter name", style: { marginRight: '10px', padding: '5px' } }) })] }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #28a745', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\uD83D\uDEE0\uFE0F Get Utilities" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.showSnackbar(), style: { marginRight: '10px' }, children: "Show Snackbar" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.showDialog(), children: "Show Dialog" })] }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #ffc107', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\u2699\uFE0F Background Worker" }), jsxRuntimeExports.jsx("p", { children: "Click to start background task that will add 10 to count after 2 seconds" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.startBackgroundTask(), disabled: isLoading, style: { marginRight: '10px' }, children: isLoading ? 'Running...' : 'Start Background Task' })] }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #6f42c1', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\uD83D\uDD27 Rx Operators" }), jsxRuntimeExports.jsxs("p", { children: ["Count doubled: ", advancedController.count.map(x => x * 2).value] }), jsxRuntimeExports.jsxs("p", { children: ["Count is even: ", advancedController.count.map(x => x % 2 === 0).value ? 'Yes' : 'No'] }), jsxRuntimeExports.jsxs("p", { children: ["Name length: ", advancedController.name.map(x => x.length).value] })] }), jsxRuntimeExports.jsxs("div", { style: { marginTop: '30px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h3", { children: "\uD83D\uDD0D Debug Info:" }), jsxRuntimeExports.jsxs("p", { children: ["Controller Subjects: ", advancedController.subjects.size] }), jsxRuntimeExports.jsxs("p", { children: ["Is Controller Disposed: ", advancedController.isDisposed ? 'Yes' : 'No'] }), jsxRuntimeExports.jsxs("p", { children: ["Worker Running: ", isLoading ? 'Yes' : 'No'] })] })] }));
+    return (jsxRuntimeExports.jsxs("div", { style: { padding: '20px', fontFamily: 'Arial, sans-serif' }, children: [jsxRuntimeExports.jsx("h1", { children: "\uD83D\uDE80 Flox Advanced Features Demo" }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #007bff', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\uD83D\uDD04 Rx Variables" }), jsxRuntimeExports.jsxs("p", { children: ["Count: ", count] }), jsxRuntimeExports.jsxs("p", { children: ["Name: ", name] }), jsxRuntimeExports.jsxs("p", { children: ["Loading: ", isLoading ? 'Yes' : 'No'] }), jsxRuntimeExports.jsxs("div", { style: { marginTop: '10px' }, children: [jsxRuntimeExports.jsx("button", { onClick: () => advancedController.increment(), style: { marginRight: '10px' }, children: "Increment" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.decrement(), style: { marginRight: '10px' }, children: "Decrement" }), jsxRuntimeExports.jsx("button", { onClick: () => setCount(0), children: "Reset" })] }), jsxRuntimeExports.jsx("div", { style: { marginTop: '10px' }, children: jsxRuntimeExports.jsx("input", { type: "text", value: name, onChange: (e) => advancedController.updateName(e.target.value), placeholder: "Enter name", style: { marginRight: '10px', padding: '5px' } }) })] }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #28a745', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\uD83D\uDEE0\uFE0F FloxUtils" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.showSnackbar(), style: { marginRight: '10px' }, children: "Show Snackbar" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.showDialog(), children: "Show Dialog" })] }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #ffc107', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\u2699\uFE0F Background Worker" }), jsxRuntimeExports.jsx("p", { children: "Click to start background task that will add 10 to count after 2 seconds" }), jsxRuntimeExports.jsx("button", { onClick: () => advancedController.startBackgroundTask(), disabled: isLoading, style: { marginRight: '10px' }, children: isLoading ? 'Running...' : 'Start Background Task' })] }), jsxRuntimeExports.jsxs("div", { style: { marginBottom: '30px', padding: '15px', border: '2px solid #6f42c1', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h2", { children: "\uD83D\uDD27 Rx Operators" }), jsxRuntimeExports.jsxs("p", { children: ["Count doubled: ", advancedController.count.map(x => x * 2).value] }), jsxRuntimeExports.jsxs("p", { children: ["Count is even: ", advancedController.count.map(x => x % 2 === 0).value ? 'Yes' : 'No'] }), jsxRuntimeExports.jsxs("p", { children: ["Name length: ", advancedController.name.map(x => x.length).value] })] }), jsxRuntimeExports.jsxs("div", { style: { marginTop: '30px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' }, children: [jsxRuntimeExports.jsx("h3", { children: "\uD83D\uDD0D Debug Info:" }), jsxRuntimeExports.jsxs("p", { children: ["Controller Subjects: ", advancedController.subjects.size] }), jsxRuntimeExports.jsxs("p", { children: ["Is Controller Disposed: ", advancedController.isDisposed ? 'Yes' : 'No'] }), jsxRuntimeExports.jsxs("p", { children: ["Worker Running: ", isLoading ? 'Yes' : 'No'] })] })] }));
 };
 
 exports.AdvancedController = AdvancedController;
@@ -2400,7 +2396,7 @@ exports.Binding = Binding;
 exports.Controller = Controller;
 exports.FenixPermanentDemo = FenixPermanentDemo;
 exports.Flox = Flox;
-exports.Get = Get;
+exports.FloxUtils = FloxUtils;
 exports.HomeBinding = HomeBinding;
 exports.HomeController = HomeController;
 exports.Rx = Rx;

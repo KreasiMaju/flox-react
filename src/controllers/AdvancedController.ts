@@ -1,7 +1,7 @@
 import { Controller } from '../core/Controller';
-import { Rx, rxInt, rxString, rxBool } from '../core/Rx';
-import { Get } from '../core/Get';
+import { FloxUtils } from '../core/Get';
 import { BackgroundWorker } from '../core/Worker';
+import { Rx, rxInt, rxString, rxBool } from '../core/Rx';
 
 export interface AdvancedControllerInterface {
   count: Rx<number>;
@@ -12,11 +12,10 @@ export interface AdvancedControllerInterface {
   updateName(name: string): void;
   startBackgroundTask(): void;
   showSnackbar(): void;
-  showDialog(): void;
+  showDialog(): Promise<void>;
 }
 
 export class AdvancedController extends Controller implements AdvancedControllerInterface {
-  // Rx variables
   count = rxInt(0);
   name = rxString('Advanced User');
   isLoading = rxBool(false);
@@ -24,13 +23,15 @@ export class AdvancedController extends Controller implements AdvancedController
   constructor() {
     super();
     
-    // Register worker
+    // Setup background worker
     BackgroundWorker.create('background-task', async () => {
       this.isLoading.value = true;
+      
+      // Simulate async work
       await new Promise(resolve => setTimeout(resolve, 2000));
-      this.count.value += 10;
+      
       this.isLoading.value = false;
-      Get.snackbar('Background task completed!');
+      FloxUtils.snackbar('Background task completed!');
     });
   }
 
@@ -51,18 +52,18 @@ export class AdvancedController extends Controller implements AdvancedController
   }
 
   showSnackbar(): void {
-    Get.snackbar(`Hello ${this.name.value}! Count is ${this.count.value}`);
+    FloxUtils.snackbar(`Hello ${this.name.value}! Count is ${this.count.value}`);
   }
 
   async showDialog(): Promise<void> {
-    const confirmed = await Get.dialog(
+    const confirmed = await FloxUtils.dialog(
       'Confirmation', 
       `Are you sure you want to reset count from ${this.count.value} to 0?`
     );
     
     if (confirmed) {
       this.count.value = 0;
-      Get.snackbar('Count reset to 0!');
+      FloxUtils.snackbar('Count reset to 0!');
     }
   }
 
@@ -72,9 +73,6 @@ export class AdvancedController extends Controller implements AdvancedController
 
   onDispose(): void {
     BackgroundWorker.delete('background-task');
-    this.count.dispose();
-    this.name.dispose();
-    this.isLoading.dispose();
-    super.onDispose();
+    console.log('AdvancedController disposed');
   }
 } 
