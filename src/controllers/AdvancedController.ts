@@ -1,5 +1,5 @@
 import { Controller } from '../core/Controller';
-import { FloxUtils } from '../core/Get';
+
 import { BackgroundWorker } from '../core/Worker';
 import { Rx, rxInt, rxString, rxBool } from '../core/Rx';
 
@@ -31,7 +31,7 @@ export class AdvancedController extends Controller implements AdvancedController
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       this.isLoading.value = false;
-      FloxUtils.snackbar('Background task completed!');
+      console.log('Background task completed!');
     });
   }
 
@@ -52,18 +52,17 @@ export class AdvancedController extends Controller implements AdvancedController
   }
 
   showSnackbar(): void {
-    FloxUtils.snackbar(`Hello ${this.name.value}! Count is ${this.count.value}`);
+    console.log(`Hello ${this.name.value}! Count is ${this.count.value}`);
   }
 
   async showDialog(): Promise<void> {
-    const confirmed = await FloxUtils.dialog(
-      'Confirmation', 
+    const confirmed = confirm(
       `Are you sure you want to reset count from ${this.count.value} to 0?`
     );
     
     if (confirmed) {
       this.count.value = 0;
-      FloxUtils.snackbar('Count reset to 0!');
+      console.log('Count reset to 0!');
     }
   }
 

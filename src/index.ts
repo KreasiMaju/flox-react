@@ -1,10 +1,11 @@
 // Core exports
 export { Controller } from './core/Controller';
-export { Subject, type Observer } from './core/Subject';
-export { Binding, type BindingInterface } from './core/Binding';
-export { Flox, flox } from './core/Flox';
+export { Binding } from './core/Binding';
+export { Flox } from './core/Flox';
+
 export { Rx, rx, rxInt, rxString, rxBool } from './core/Rx';
-export { FloxUtils } from './core/Get';
+export { Subject } from './core/Subject';
+
 export { BackgroundWorker } from './core/Worker';
 
 // Monitoring exports
@@ -26,23 +27,39 @@ export {
 export { FloxMonitorDashboard } from './components/FloxMonitorDashboard';
 
 // Hooks exports
-export { useController, useSubject, useControllerSubject } from './hooks/useController';
-export { useBinding, useGlobalController } from './hooks/useBinding';
-export { useRx, useRxValue } from './hooks/useRx';
+export { useRx } from './hooks/useRx';
+export { useController } from './hooks/useController';
+export { useBinding } from './hooks/useBinding';
 
-// Example exports
-export { HomeController, type HomeControllerInterface, type HomeControllerRepository, type HomeViewModel } from './controllers/HomeController';
-export { UserController, type UserControllerInterface } from './controllers/UserController';
-export { AppController, type AppControllerInterface } from './controllers/AppController';
-export { SettingsController, type SettingsControllerInterface } from './controllers/SettingsController';
-export { AdvancedController, type AdvancedControllerInterface } from './controllers/AdvancedController';
-export { HomeBinding } from './bindings/HomeBinding';
-// Removed SimpleCounter to avoid circular dependency
+// Components exports
+export { HomePage } from './components/HomePage';
 export { SimpleHomePage } from './components/SimpleHomePage';
-export { FenixPermanentDemo } from './components/FenixPermanentDemo';
 export { AdvancedDemo } from './components/AdvancedDemo';
-export { MonitorDemo } from './components/MonitorDemo';
+export { MonitorDemo } from './components/MonitorDemo'; 
 export { TestingDemo } from './components/TestingDemo';
+
+// Router exports
+export { 
+  FloxRouter, 
+  floxRouter,
+  type Route,
+  type RouteMatch,
+  type NavigationOptions,
+  type RouterState
+} from './core/Router';
+export { 
+  Router,
+  Link,
+  Navigate,
+  useRouter,
+  useRouteParams,
+  useRouteMatch,
+  useNavigation,
+  type RouterProps,
+  type LinkProps,
+  type NavigateProps
+} from './components/Router';
+export { RouterDemo } from './components/RouterDemo';
 
 // Testing Framework exports
 export { 

@@ -1,7 +1,8 @@
-// React import not needed in newer versions
+
 import { AdvancedDemo } from './components/AdvancedDemo';
 import { MonitorDemo } from './components/MonitorDemo';
 import { TestingDemo } from './components/TestingDemo';
+import { RouterDemo } from './components/RouterDemo';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <AdvancedDemo />
       <MonitorDemo />
       <TestingDemo />
+      <RouterDemo />
     </div>
   );
 }

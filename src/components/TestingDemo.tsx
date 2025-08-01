@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
-import { FloxTestRunner, FloxTestUtils } from '../testing/FloxTestRunner';
+import { FloxTestRunner } from '../testing/FloxTestRunner';
+
+
+import { Controller } from '../core/Controller';
+import { rxInt, rxString, rxBool } from '../core/Rx';
 
 // Example controller for testing demo
-class TestController {
-  count = 0;
-  name = '';
-  loading = false;
-  error = '';
+class TestController extends Controller {
+  count = rxInt(0);
+  name = rxString('');
+  loading = rxBool(false);
+  error = rxString('');
 
   increment() {
-    this.count++;
+    this.count.value++;
   }
 
   setName(name: string) {
-    this.name = name;
+    this.name.value = name;
   }
 
   async loadData() {
-    this.loading = true;
-    this.error = '';
+    this.loading.value = true;
+    this.error.value = '';
     
     try {
       const response = await fetch('/api/test-data');
       const data = await response.json();
-      this.name = data.name;
+      this.name.value = data.name;
     } catch (err) {
-      this.error = err instanceof Error ? err.message : 'Unknown error';
+      this.error.value = err instanceof Error ? err.message : 'Unknown error';
     } finally {
-      this.loading = false;
+      this.loading.value = false;
     }
   }
 }
@@ -48,10 +52,12 @@ export const TestingDemo: React.FC = () => {
       // Test 1: Basic controller test
       const result1 = await FloxTestRunner.testController(
         TestController,
-        async (controller, utils) => {
+        async (controller) => {
           controller.increment();
           controller.increment();
-          expect(controller.count).toBe(2);
+          if (controller.count.value !== 2) {
+            throw new Error('Expected count to be 2');
+          }
         },
         { testName: 'Basic Controller Test' }
       );
@@ -60,15 +66,18 @@ export const TestingDemo: React.FC = () => {
       // Test 2: API test
       const result2 = await FloxTestRunner.testController(
         TestController,
-        async (controller, utils) => {
-          const mockData = { name: 'Test User' };
-          utils.mockApiResponse('/api/test-data', mockData);
-          
+        async (controller) => {
           await controller.loadData();
           
-          expect(controller.name).toBe('Test User');
-          expect(controller.loading).toBe(false);
-          expect(controller.error).toBe('');
+          if (controller.name.value !== 'Test User') {
+            throw new Error('Expected name to be Test User');
+          }
+          if (controller.loading.value !== false) {
+            throw new Error('Expected loading to be false');
+          }
+          if (controller.error.value !== '') {
+            throw new Error('Expected error to be empty');
+          }
         },
         { testName: 'API Integration Test' }
       );
@@ -77,13 +86,15 @@ export const TestingDemo: React.FC = () => {
       // Test 3: Error handling test
       const result3 = await FloxTestRunner.testController(
         TestController,
-        async (controller, utils) => {
-          utils.mockApiError('/api/test-data', 'Network error');
-          
+        async (controller) => {
           await controller.loadData();
           
-          expect(controller.error).toBe('Network error');
-          expect(controller.loading).toBe(false);
+          if (controller.error.value !== 'Network error') {
+            throw new Error('Expected error to be Network error');
+          }
+          if (controller.loading.value !== false) {
+            throw new Error('Expected loading to be false');
+          }
         },
         { testName: 'Error Handling Test' }
       );
@@ -145,7 +156,7 @@ export const TestingDemo: React.FC = () => {
       // Test Rx variable operations
       const result1 = await FloxTestRunner.testPerformance(
         () => {
-          const { rxInt, rxString, rxBool } = require('../core/Rx');
+          // Rx variable testing
           const count = rxInt(0);
           const name = rxString('');
           const active = rxBool(false);
@@ -163,7 +174,7 @@ export const TestingDemo: React.FC = () => {
       // Test Rx subscriptions
       const result2 = await FloxTestRunner.testMemoryLeaks(
         async () => {
-          const { rxInt } = require('../core/Rx');
+          // Memory leak testing
           const count = rxInt(0);
           const subscriptions: (() => void)[] = [];
 
@@ -209,9 +220,11 @@ export const TestingDemo: React.FC = () => {
         async () => {
           const result = await FloxTestRunner.testController(
             TestController,
-            async (controller, utils) => {
+            async (controller) => {
               controller.increment();
-              expect(controller.count).toBe(1);
+              if (controller.count.value !== 1) {
+                throw new Error('Expected count to be 1');
+              }
             }
           );
           if (!result.success) throw new Error(result.error?.message);
@@ -219,11 +232,11 @@ export const TestingDemo: React.FC = () => {
         async () => {
           const result = await FloxTestRunner.testController(
             TestController,
-            async (controller, utils) => {
-              const mockData = { name: 'Test User' };
-              utils.mockApiResponse('/api/test-data', mockData);
+            async (controller) => {
               await controller.loadData();
-              expect(controller.name).toBe('Test User');
+              if (controller.name.value !== 'Test User') {
+                throw new Error('Expected name to be Test User');
+              }
             }
           );
           if (!result.success) throw new Error(result.error?.message);
@@ -256,7 +269,7 @@ export const TestingDemo: React.FC = () => {
   };
 
   const getStatusIcon = (success: boolean) => success ? '✅' : '❌';
-  const getStatusColor = (success: boolean) => success ? 'text-green-600' : 'text-red-600';
+
 
   return (
     <div className="testing-demo" style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>

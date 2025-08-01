@@ -1,7 +1,6 @@
-import { Rx, rx, rxInt, rxString, rxBool } from '../core/Rx';
+import { Rx, rx } from '../core/Rx';
 import { Controller } from '../core/Controller';
 import { Binding } from '../core/Binding';
-import { Subject } from '../core/Subject';
 
 export interface MockApiResponse {
   url: string;
@@ -47,10 +46,10 @@ export class FloxTestUtils {
     
     // Mock lifecycle methods if they don't exist
     if (!controller.onInit) {
-      controller.onInit = jest.fn();
+      controller.onInit = () => {};
     }
     if (!controller.onDispose) {
-      controller.onDispose = jest.fn();
+      controller.onDispose = () => {};
     }
     
     return controller;
@@ -64,7 +63,7 @@ export class FloxTestUtils {
     
     // Mock dependencies method if it doesn't exist
     if (!binding.dependencies) {
-      binding.dependencies = jest.fn();
+      binding.dependencies = () => {};
     }
     
     return binding;
@@ -83,25 +82,25 @@ export class FloxTestUtils {
     };
 
     // Mock fetch
-    this.originalFetch = global.fetch;
-    global.fetch = jest.fn().mockImplementation(this.mockFetch.bind(this));
+    this.originalFetch = fetch;
+    (window as any).fetch = this.mockFetch.bind(this);
 
     // Mock console
-    this.originalConsole = global.console;
-    global.console = {
+    this.originalConsole = console;
+    (window as any).console = {
       ...console,
-      log: jest.fn().mockImplementation((...args) => {
+      log: (...args: any[]) => {
         this.testEnvironment!.consoleLogs.push(args.join(' '));
         this.originalConsole!.log(...args);
-      }),
-      warn: jest.fn().mockImplementation((...args) => {
+      },
+      warn: (...args: any[]) => {
         this.testEnvironment!.consoleLogs.push(`WARN: ${args.join(' ')}`);
         this.originalConsole!.warn(...args);
-      }),
-      error: jest.fn().mockImplementation((...args) => {
+      },
+      error: (...args: any[]) => {
         this.testEnvironment!.consoleLogs.push(`ERROR: ${args.join(' ')}`);
         this.originalConsole!.error(...args);
-      })
+      }
     };
   }
 
@@ -110,12 +109,12 @@ export class FloxTestUtils {
    */
   cleanupTestEnvironment(): void {
     if (this.originalFetch) {
-      global.fetch = this.originalFetch;
+      (window as any).fetch = this.originalFetch;
       this.originalFetch = null;
     }
 
     if (this.originalConsole) {
-      global.console = this.originalConsole;
+      (window as any).console = this.originalConsole;
       this.originalConsole = null;
     }
 
@@ -182,7 +181,6 @@ export class FloxTestUtils {
    */
   static async waitForRxChange<T>(rx: Rx<T>, timeout: number = 5000): Promise<T> {
     const initialValue = rx.value;
-    const startTime = Date.now();
     
     return new Promise((resolve, reject) => {
       const subscription = rx.subscribe((newValue) => {
@@ -349,69 +347,12 @@ export class FloxTestUtils {
    * Force garbage collection (if available)
    */
   static forceGarbageCollection(): void {
-    if (global.gc) {
-      global.gc();
+    if ((window as any).gc) {
+      (window as any).gc();
     }
   }
 
-  /**
-   * Create a test controller with common patterns
-   */
-  static createTestController() {
-    class TestController extends Controller {
-      count = rxInt(0);
-      name = rxString('');
-      active = rxBool(false);
-      data = rx<any[]>([]);
-      loading = rxBool(false);
-      error = rxString('');
 
-      increment() {
-        this.count.value++;
-      }
-
-      decrement() {
-        this.count.value--;
-      }
-
-      setName(name: string) {
-        this.name.value = name;
-      }
-
-      toggleActive() {
-        this.active.value = !this.active.value;
-      }
-
-      async loadData() {
-        this.loading.value = true;
-        this.error.value = '';
-        
-        try {
-          const response = await fetch('/api/data');
-          const data = await response.json();
-          this.data.value = data;
-        } catch (err) {
-          this.error.value = err instanceof Error ? err.message : 'Unknown error';
-        } finally {
-          this.loading.value = false;
-        }
-      }
-
-      addItem(item: any) {
-        this.data.value = [...this.data.value, item];
-      }
-
-      removeItem(id: string) {
-        this.data.value = this.data.value.filter(item => item.id !== id);
-      }
-
-      clearData() {
-        this.data.value = [];
-      }
-    }
-
-    return TestController;
-  }
 }
 
 // Export singleton instance

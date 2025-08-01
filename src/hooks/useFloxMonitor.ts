@@ -1,11 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { floxMonitor, FloxError, FloxWarning } from '../core/FloxMonitor';
-import { useRx } from './useRx';
 
 export interface UseFloxMonitorOptions {
   enablePatternDetection?: boolean;
-  enablePerformanceMonitoring?: boolean;
-  enableVisualFeedback?: boolean;
   componentName?: string;
 }
 
@@ -19,8 +16,6 @@ export interface FloxMonitorStats {
 export function useFloxMonitor(options: UseFloxMonitorOptions = {}) {
   const {
     enablePatternDetection = true,
-    enablePerformanceMonitoring = true,
-    enableVisualFeedback = true,
     componentName
   } = options;
 

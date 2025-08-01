@@ -168,8 +168,6 @@ export class FloxTestRunner {
       
       // Calculate statistics
       const avgDuration = executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
-      const maxDurationObserved = Math.max(...executionTimes);
-      const minDurationObserved = Math.min(...executionTimes);
       
       const duration = performance.now() - startTime;
       
@@ -238,7 +236,6 @@ export class FloxTestRunner {
       
       // Calculate memory growth
       const totalMemoryGrowth = memorySnapshots.reduce((a, b) => a + b, 0);
-      const averageMemoryGrowth = totalMemoryGrowth / memorySnapshots.length;
       
       const duration = performance.now() - startTime;
       

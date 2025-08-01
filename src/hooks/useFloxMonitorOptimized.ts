@@ -3,8 +3,6 @@ import { floxMonitor, FloxError, FloxWarning } from '../core/FloxMonitor';
 
 export interface UseFloxMonitorOptimizedOptions {
   enablePatternDetection?: boolean;
-  enablePerformanceMonitoring?: boolean;
-  enableVisualFeedback?: boolean;
   componentName?: string;
   maxErrors?: number; // Limit jumlah error yang disimpan
   maxWarnings?: number; // Limit jumlah warning yang disimpan
@@ -22,8 +20,6 @@ export interface FloxMonitorStats {
 export function useFloxMonitorOptimized(options: UseFloxMonitorOptimizedOptions = {}) {
   const {
     enablePatternDetection = true,
-    enablePerformanceMonitoring = true,
-    enableVisualFeedback = true,
     componentName,
     maxErrors = 100,
     maxWarnings = 100,
@@ -102,7 +98,7 @@ export function useFloxMonitorOptimized(options: UseFloxMonitorOptimizedOptions 
   }, []);
 
   // Auto cleanup function
-  const autoCleanup = useCallback(() => {
+  const performAutoCleanup = useCallback(() => {
     if (!autoCleanup) return;
     
     const now = Date.now();
@@ -151,7 +147,7 @@ export function useFloxMonitorOptimized(options: UseFloxMonitorOptimizedOptions 
     
     // Setup auto cleanup
     if (autoCleanup) {
-      cleanupTimeoutRef.current = window.setInterval(autoCleanup, cleanupInterval);
+      cleanupTimeoutRef.current = window.setInterval(performAutoCleanup, cleanupInterval);
     }
     
     return () => {
@@ -218,7 +214,7 @@ export function useFloxMonitorOptimized(options: UseFloxMonitorOptimizedOptions 
 // Optimized performance monitor dengan cleanup yang lebih baik
 export function useFloxPerformanceMonitorOptimized(componentName: string) {
   const { reportWarning } = useFloxMonitorOptimized({ componentName });
-  const renderCountRef = useRef(0);
+  // Performance monitoring
   const lastWarningTimeRef = useRef(0);
 
   useEffect(() => {

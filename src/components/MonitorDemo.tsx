@@ -203,7 +203,7 @@ export const MonitorDemo: React.FC = () => {
       controller.data.value = newValue; // Direct assignment
     `;
     
-    detectPatterns(badCode, { controller: 'UserController' });
+    detectPatterns(badCode, 'UserController');
   };
   
   const testUnhandledPromise = () => {
